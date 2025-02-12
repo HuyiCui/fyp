@@ -57,8 +57,8 @@ export default {
         if (valid) {
           this.$request.put('/updatePassword', this.user).then(res => {
             if (res.code === '200') {
-              // 成功更新
-              localStorage.removeItem('xm-user')   // 清除缓存的用户信息
+              // Successfully updated
+              localStorage.removeItem('xm-user')   // Clear cached user information
               this.$message.success('Password changed successfully')
               this.$router.push('/login')
             } else {

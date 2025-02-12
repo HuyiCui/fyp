@@ -72,7 +72,7 @@ export default {
       })
     },
     updateUser() {
-      this.user = JSON.parse(localStorage.getItem('xm-user') || '{}')   // 重新获取下用户的最新信息
+      this.user = JSON.parse(localStorage.getItem('xm-user') || '{}')   // Re-obtain the latest information of the user
     },
     // 退出登录
     logout() {

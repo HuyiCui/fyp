@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/files")
 public class FileController {
 
-    // 文件上传存储路径
+    // File upload storage path
     private static final String filePath = System.getProperty("user.dir") + "/files/";
 
     @Value("${server.port:9090}")
@@ -30,7 +30,7 @@ public class FileController {
     private String ip;
 
     /**
-     * 文件上传
+     * upload file
      */
     @PostMapping("/upload")
     public Result upload(MultipartFile file) {
@@ -57,7 +57,7 @@ public class FileController {
 
 
     /**
-     * 获取文件
+     * get file
      *
      * @param flag
      * @param response
@@ -81,7 +81,7 @@ public class FileController {
     }
 
     /**
-     * 删除文件
+     * delete file
      *
      * @param flag
      */

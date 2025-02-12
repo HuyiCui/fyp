@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 公告信息表前端操作接口
+ * Announcement information table front-end operation interface
  **/
 @RestController
 @RequestMapping("/type")
@@ -20,7 +20,7 @@ public class TypeController {
     private TypeService typeService;
 
     /**
-     * 新增
+     * add
      */
     @PostMapping("/add")
     public Result add(@RequestBody Type type) {
@@ -29,7 +29,7 @@ public class TypeController {
     }
 
     /**
-     * 删除
+     * delete
      */
     @DeleteMapping("/delete/{id}")
     public Result deleteById(@PathVariable Integer id) {
@@ -38,7 +38,7 @@ public class TypeController {
     }
 
     /**
-     * 批量删除
+     * delete
      */
     @DeleteMapping("/delete/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
@@ -47,7 +47,7 @@ public class TypeController {
     }
 
     /**
-     * 修改
+     * update
      */
     @PutMapping("/update")
     public Result updateById(@RequestBody Type type) {
@@ -56,7 +56,7 @@ public class TypeController {
     }
 
     /**
-     * 根据ID查询
+     * selectById
      */
     @GetMapping("/selectById/{id}")
     public Result selectById(@PathVariable Integer id) {
@@ -65,7 +65,7 @@ public class TypeController {
     }
 
     /**
-     * 查询所有
+     * selectAll
      */
     @GetMapping("/selectAll")
     public Result selectAll(Type type ) {
@@ -74,7 +74,7 @@ public class TypeController {
     }
 
     /**
-     * 分页查询
+     * selectPage
      */
     @GetMapping("/selectPage")
     public Result selectPage(Type type,

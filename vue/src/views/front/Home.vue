@@ -6,10 +6,10 @@
       <div style="width: 66%; background-color: white; height: 1000px">
         <div style="color: rgb(53,84,118); margin: 15px 0 15px 18px; font-size: 16px; font-weight: bold">Second-hand Market</div>
         <div style="display: flex; margin: 0 25px">
-          <div style="flex: 2; height: 800px; background-color: rgb(232,232,232)">
-            <div style="display: flex; color: rgb(102,102,102); margin: 14px 0">
-              <img src="" alt="">
-              <div style="margin-left: 10px; font-size: 14px">Item Type Options</div>
+          <div style="flex: 2; height: 800px">
+            <div style="display: flex; color: rgb(102,102,102); margin: 14px 0" v-for="item in typeData">
+              <img :src="item.img" alt="" style="height: 20px; width: 20px">
+              <div style="margin-left: 10px; font-size: 14px">{{ item.name }}</div>
             </div>
           </div>
           <div style="flex: 5; height: 800px; background-color: rgb(186,186,186)">
@@ -37,15 +37,23 @@ export default {
 
   data() {
     return {
-
+      typeData: []
     }
   },
   mounted() {
-
+    this.loadType()
   },
-  // methods：本页面所有的点击事件或者其他函数定义区
+  // methods: All click events or other function definition areas of this page
   methods: {
-
+    loadType() {
+      this.$request.get('/type/selectAll').then(res => {
+        if(res.code == '200') {
+          this.typeData = res.data
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    }
   }
 }
 </script>

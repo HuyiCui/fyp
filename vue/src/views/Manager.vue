@@ -18,7 +18,7 @@
         <el-dropdown placement="bottom">
           <div class="avatar">
             <img :src="user.avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" />
-            <div>{{ user.name ||  'admin' }}</div>
+            <div>{{ user.name ||  'admin   ' }}</div>
           </div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="goToPerson">personal information</el-dropdown-item>
@@ -29,9 +29,9 @@
       </div>
     </div>
 
-    <!--  主体  -->
+    <!--  main body  -->
     <div class="manager-main">
-      <!--  侧边栏  -->
+      <!--  Sidebar  -->
       <div class="manager-main-left">
         <el-menu :default-openeds="['info', 'user']" router style="border: none" :default-active="$route.path">
           <el-menu-item index="/home">
@@ -55,7 +55,7 @@
         </el-menu>
       </div>
 
-      <!--  数据表格  -->
+      <!--  Data Table  -->
       <div class="manager-main-right">
         <router-view @update:user="updateUser" />
       </div>
@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     updateUser() {
-      this.user = JSON.parse(localStorage.getItem('xm-user') || '{}')   // 重新获取下用户的最新信息
+      this.user = JSON.parse(localStorage.getItem('xm-user') || '{}')   // Re-obtain the latest information of the user
     },
     goToPerson() {
       if (this.user.role === 'ADMIN') {

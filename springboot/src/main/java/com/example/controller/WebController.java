@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 /**
- * 基础前端接口
+ * Basic front-end interface
  */
 @RestController
 public class WebController {
@@ -26,7 +26,7 @@ public class WebController {
     }
 
     /**
-     * 登录
+     * Log in
      */
     @PostMapping("/login")
     public Result login(@RequestBody Account account) {
@@ -41,7 +41,7 @@ public class WebController {
     }
 
     /**
-     * 注册
+     * register
      */
     @PostMapping("/register")
     public Result register(@RequestBody Account account) {
@@ -56,7 +56,7 @@ public class WebController {
     }
 
     /**
-     * 修改密码
+     * Change Password
      */
     @PutMapping("/updatePassword")
     public Result updatePassword(@RequestBody Account account) {

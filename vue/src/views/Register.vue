@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div style="width: 400px; padding: 30px; background-color: white; border-radius: 5px;">
-      <div style="text-align: center; font-size: 20px; margin-bottom: 20px; color: #333">欢迎注册</div>
+      <div style="text-align: center; font-size: 20px; margin-bottom: 20px; color: #333">Welcome to register</div>
       <el-form :model="form" :rules="rules" ref="formRef">
         <el-form-item prop="username">
           <el-input prefix-icon="el-icon-user" placeholder="Please enter the username" v-model="form.username"></el-input>
@@ -30,7 +30,7 @@
 export default {
   name: "Register",
   data() {
-    // 验证码校验
+    // Verification code verification
     const validatePassword = (rule, confirmPass, callback) => {
       if (confirmPass === '') {
         callback(new Error('Please confirm the password'))
@@ -62,10 +62,10 @@ export default {
     register() {
       this.$refs['formRef'].validate((valid) => {
         if (valid) {
-          // 验证通过
+          // Verification passed
           this.$request.post('/register', this.form).then(res => {
             if (res.code === '200') {
-              this.$router.push('/')  // 跳转登录页面
+              this.$router.push('/')  // Jump to login page
               this.$message.success('Successful registration ')
             } else {
               this.$message.error(res.msg)

@@ -12,7 +12,7 @@ public class WebConfig implements  WebMvcConfigurer {
     @Resource
     private JwtInterceptor jwtInterceptor;
 
-    // 加自定义拦截器JwtInterceptor，设置拦截规则
+    // Add custom interceptor JwtInterceptor and set interception rules
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor).addPathPatterns("/**")

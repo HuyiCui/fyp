@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
- * Token工具类
+ * Token Tools
  */
 @Component
 public class TokenUtils {
@@ -38,16 +38,16 @@ public class TokenUtils {
     }
 
     /**
-     * 生成token
+     * createToken
      */
     public static String createToken(String data, String sign) {
-        return JWT.create().withAudience(data) // 将 userId-role 保存到 token 里面,作为载荷
-                .withExpiresAt(DateUtil.offsetHour(new Date(), 2)) // 2小时后token过期
-                .sign(Algorithm.HMAC256(sign)); // 以 password 作为 token 的密钥
+        return JWT.create().withAudience(data) // Save userId-role into token as payload
+                .withExpiresAt(DateUtil.offsetHour(new Date(), 2)) // The token expires after 2 hours.
+                .sign(Algorithm.HMAC256(sign)); // Use password as the token key
     }
 
     /**
-     * 获取当前登录的用户信息
+     * getCurrentUser
      */
     public static Account getCurrentUser() {
         try {
@@ -55,8 +55,8 @@ public class TokenUtils {
             String token = request.getHeader(Constants.TOKEN);
             if (ObjectUtil.isNotEmpty(token)) {
                 String userRole = JWT.decode(token).getAudience().get(0);
-                String userId = userRole.split("-")[0];  // 获取用户id
-                String role = userRole.split("-")[1];    // 获取角色
+                String userId = userRole.split("-")[0];  // Get user id
+                String role = userRole.split("-")[1];    // Get Role
                 if (RoleEnum.ADMIN.name().equals(role)) {
                     return staticAdminService.selectById(Integer.valueOf(userId));
                 }
@@ -64,7 +64,7 @@ public class TokenUtils {
         } catch (Exception e) {
             log.error("Error in getting current user information", e);
         }
-        return new Account();  // 返回空的账号对象
+        return new Account();  // Returns an empty account object
     }
 }
 
