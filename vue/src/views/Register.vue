@@ -13,12 +13,18 @@
           <el-input prefix-icon="el-icon-lock" placeholder="Please confirm the password" show-password  v-model="form.confirmPass"></el-input>
         </el-form-item>
         <el-form-item>
+          <el-select v-model="form.role" placeholder="please select your role" style="width: 100%">
+            <el-option label="merchant" value="BUSINESS"></el-option>
+            <el-option label="user" value="USER"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
           <el-button style="width: 100%; background-color: #333; border-color: #333; color: white" @click="register">Register</el-button>
         </el-form-item>
         <div style="display: flex; align-items: center">
           <div style="flex: 1"></div>
           <div style="flex: 1; text-align: right">
-            If you already have an account. please click <a href="/login">here</a> to login
+            Click <a href="/login">here</a> to login
           </div>
         </div>
       </el-form>
