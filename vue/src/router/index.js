@@ -19,6 +19,7 @@ const routes = [
       { path: '403', name: 'NoAuth', meta: { name: 'No permissions' }, component: () => import('../views/manager/403') },
       { path: 'home', name: 'Home', meta: { name: 'System Home' }, component: () => import('../views/manager/Home') },
       { path: 'admin', name: 'Admin', meta: { name: 'Administrator Information' }, component: () => import('../views/manager/Admin') },
+      { path: 'business', name: 'Business', meta: { name: 'Merchant Information' }, component: () => import('../views/manager/Business') },
       { path: 'adminPerson', name: 'AdminPerson', meta: { name: 'Personal information' }, component: () => import('../views/manager/AdminPerson') },
       { path: 'password', name: 'Password', meta: { name: 'Change Password' }, component: () => import('../views/manager/Password') },
       { path: 'notice', name: 'Notice', meta: { name: 'Announcement Information' }, component: () => import('../views/manager/Notice') },
