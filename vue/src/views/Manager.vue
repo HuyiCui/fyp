@@ -52,6 +52,7 @@
             </template>
             <el-menu-item index="/admin">Administrator</el-menu-item>
             <el-menu-item index="/business">Merchant</el-menu-item>
+            <el-menu-item index="/user">User</el-menu-item>
           </el-submenu>
         </el-menu>
       </div>
