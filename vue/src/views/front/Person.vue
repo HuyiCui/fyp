@@ -88,7 +88,7 @@ export default {
   methods: {
     update() {
       // Save the current user information to the database
-      this.$request.put('/admin/update', this.user).then(res => {
+      this.$request.put('/user/update', this.user).then(res => {
         if (res.code === '200') {
           // Successfully updated
           this.$message.success('Saved successfully')

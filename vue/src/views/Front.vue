@@ -16,7 +16,7 @@
         <div v-else>
           <el-dropdown>
             <div class="front-header-dropdown">
-              <img :src="user.avatar" alt="">
+              <img @click="navToPerson" :src="user.avatar" alt="">
               <div style="margin-left: 10px">
                 <span>{{ user.name }}</span><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
               </div>
@@ -73,6 +73,9 @@ export default {
     },
     updateUser() {
       this.user = JSON.parse(localStorage.getItem('xm-user') || '{}')   // Re-obtain the latest information of the user
+    },
+    navToPerson(){
+      location.href = '/front/peron'
     },
     // 退出登录
     logout() {
