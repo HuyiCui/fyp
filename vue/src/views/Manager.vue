@@ -1,6 +1,6 @@
 <template>
   <div class="manager-container">
-    <!--  头部  -->
+    <!--  header  -->
     <div class="manager-header">
       <div class="manager-header-left">
         <img src="@/assets/imgs/logo.png" />

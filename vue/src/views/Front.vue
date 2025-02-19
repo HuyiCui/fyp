@@ -77,7 +77,7 @@ export default {
     navToPerson(){
       location.href = '/front/peron'
     },
-    // 退出登录
+    // logout
     logout() {
       localStorage.removeItem("xm-user");
       this.$router.push("/login");

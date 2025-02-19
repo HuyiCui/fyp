@@ -73,6 +73,10 @@ public class GoodsService {
      * selectPage
      */
     public PageInfo<Goods> selectPage(Goods goods, Integer pageNum, Integer pageSize) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if(RoleEnum.BUSINESS.name().equals(currentUser.getRole())) {
+            goods.setBusinessId(currentUser.getId());
+        }
         PageHelper.startPage(pageNum, pageSize);
         List<Goods> list = goodsMapper.selectAll(goods);
         return PageInfo.of(list);

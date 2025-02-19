@@ -1,6 +1,8 @@
 package com.example.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.Dict;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.example.common.Result;
@@ -11,7 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文件接口
@@ -91,5 +95,26 @@ public class FileController {
         System.out.println("Deleting files" + flag + "successfully");
     }
 
-
+    /**
+     * wang-editor file post interface
+     */
+    @PostMapping("/wang/upload")
+    public Map<String, Object> wangEditorUpload(MultipartFile file) {
+        String flag = System.currentTimeMillis() + "";
+        String fileName = file.getOriginalFilename();
+        try{
+            //File storage format: timestamp + file name
+            FileUtil.writeBytes(file.getBytes(), filePath + flag + "-" + fileName);
+            System.out.println(fileName + "--Upload Successfully");
+            Thread.sleep(1L);
+        } catch (Exception e) {
+            System.out.println(fileName + "--File upload failed");
+        }
+        String http = "http://" + ip + ":" + port + "/files/";
+        Map<String, Object> resMap = new HashMap<>();
+        //Parameters that need to be returned after wangEditor successfully uploads the image
+        resMap.put("errno", 0);
+        resMap.put("data", CollUtil.newArrayList(Dict.create().set("url", http + flag + "-" + fileName)));
+        return resMap;
+    }
 }

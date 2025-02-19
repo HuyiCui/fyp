@@ -7,7 +7,7 @@
     </div>
 
     <div class="operation">
-      <el-button type="primary" plain @click="handleAdd">Added</el-button>
+      <el-button type="primary" plain @click="handleAdd">Product publish</el-button>
       <el-button type="danger" plain @click="delBatch">Batch Deletion</el-button>
     </div>
 
@@ -24,7 +24,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="product name" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="description" label="product description" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="description" label="product description" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-button type="success" @click="viewEditor(scope.row.description)">Click to check</el-button>
+          </template>
+        </el-table-column>
         <el-table-column prop="price" label="product price" show-overflow-tooltip></el-table-column>
         <el-table-column prop="unit" label="product unit" show-overflow-tooltip></el-table-column>
         <el-table-column prop="typeName" label="type" show-overflow-tooltip></el-table-column>
@@ -52,7 +56,7 @@
     </div>
 
 
-    <el-dialog title="message" :visible.sync="fromVisible" width="40%" :close-on-click-modal="false" destroy-on-close>
+    <el-dialog title="message" :visible.sync="fromVisible" width="40%" :close-on-click-modal="false" destroy-on-close :show-close="false">
       <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
         <el-form-item label="Product picture">
           <el-upload
@@ -80,20 +84,37 @@
           <el-input v-model="form.unit" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item prop="description" label="product description">
-
+          <div id="editor" style="width: 100%"></div>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="fromVisible = false">Cancel</el-button>
+        <el-button @click="cancel">Cancel</el-button>
         <el-button type="primary" @click="save">Sure</el-button>
       </div>
     </el-dialog>
 
-
+    <el-dialog title="Product Description" :visible.sync="editorVisible" width="50%">
+      <div v-html="this.viewData" class="w-e-text"></div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import E from 'wangeditor'
+
+let editor
+function initWangEditor(content) { setTimeout( () =>{
+  if (!editor) {
+    editor = new E('#editor')
+    editor.config.placeholder = 'please enter the content'
+    editor.config.uploadFileName = 'file'
+    editor.config.uploadImgServer = 'http://localhost:9090/files/wang/upload'
+    editor.create()
+  }
+  editor.txt.html(content)
+}, 0)
+}
+
 export default {
   name: "Notice",
   data() {
@@ -104,6 +125,7 @@ export default {
       total: 0,
       name: null,
       fromVisible: false,
+      editorVisible: false,
       form: {},
       user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
       rules: {
@@ -116,6 +138,7 @@ export default {
       },
       ids: [],
       typeData: [],
+      viewData: null,
     }
   },
   created() {
@@ -133,16 +156,31 @@ export default {
       })
     },
     handleAdd() {
+      if('check passed' !== this.user.status) {
+        this.$message.warning('havent passed')
+        return
+      }
       this.form = {}
+      initWangEditor('')
       this.fromVisible = true
     },
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row))
+      initWangEditor(this.form.description || '')
       this.fromVisible = true
+    },
+    viewEditor(content){
+      this.viewData = content
+      this.editorVisible = true
+    },
+    cancel(){
+      this.fromVisible=false
+      location.href = '/goods'
     },
     save() {
       this.$refs.formRef.validate((valid) => {
         if (valid) {
+          this.form.description = editor.txt.html()
           this.$request({
             url: this.form.id ? '/goods/update' : '/goods/add',
             method: this.form.id ? 'PUT' : 'POST',
@@ -150,8 +188,9 @@ export default {
           }).then(res => {
             if (res.code === '200') {
               this.$message.success('Saved successfully')
-              this.load(1)
+              //this.load(1)
               this.fromVisible = false
+              location.href = '/goods'
             } else {
               this.$message.error(res.msg)
             }
