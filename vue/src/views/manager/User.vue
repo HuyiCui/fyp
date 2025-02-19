@@ -139,7 +139,7 @@ export default {
         }
       })
     },
-    del(id) {   // 单个删除
+    del(id) {   // delete single one
       this.$confirm('Are you sure you want to delete?', 'Confirm Delete', {type: "warning"}).then(response => {
         this.$request.delete('/user/delete/' + id).then(res => {
           if (res.code === '200') {   // Indicates successful operation
