@@ -3,9 +3,9 @@
     <div style="height: 60px; background-color: rgb(223,223,223)"></div>
     <div style="display: flex">
       <div class="left" ></div>
-      <div style="width: 66%; background-color: white; height: 1000px;">
+      <div style="width: 66%; background-color: white; margin-bottom: 50px;">
         <div style="color: rgb(53,84,118); margin: 15px 0 15px 18px; font-size: 16px; font-weight: bold">Second-hand Market</div>
-        <div style="display: flex; margin: 0 25px; height: 545px">
+        <div style="display: flex; margin: 0 25px; height: 545px" >
           <div style="flex: 2; height: 800px">
             <div style="display: flex; color: rgb(102,102,102); margin: 14px 0" v-for="item in typeData">
               <img :src="item.img" alt="" style="height: 20px; width: 20px">
@@ -70,6 +70,16 @@
             </div>
           </div>
         </div>
+        <div style="margin: 40px 0 0 15px; height: 40px; background-color: lightskyblue; font-size: 20px; color: white; width: 130px; font-weight: bold; height: 40px; line-height: 40px; text-align: center; border-radius: 10px">Hot Selling</div>
+        <div style="margin: 10px 5px 0 5px">
+          <el-row>
+            <el-col :span="5" v-for="item in goodsData">
+              <img :src="item.img" alt="" style="width: 100%; height: 175px; border-radius: 10px; border: #cccccc 1px solid; ">
+              <div style="margin-top: 10px; font-weight: 500; font-size: 16px; width: 180px; color: black; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">{{item.name}}</div>
+              <div style="margin-top: 5px; font-size: 20px; color: darkblue">${{item.price}}</div>
+            </el-col>
+          </el-row>
+        </div>
       </div>
       <div class="right"></div>
     </div>
@@ -93,6 +103,7 @@ export default {
       typeData: [],
       top: null,
       notice: [],
+      goodsData: [],
       carousel_top: [
           require('@/assets/imgs/carousel-1.png'),
           require('@/assets/imgs/carousel-2.png'),
@@ -113,6 +124,7 @@ export default {
   mounted() {
     this.loadType()
     this.loadNotice()
+    this.loadGoods()
   },
   // methods: All click events or other function definition areas of this page
   methods: {
@@ -138,6 +150,15 @@ export default {
               i = 0
             }
           }, 2500)
+        }
+      })
+    },
+    loadGoods(){
+      this.$request.get('/goods/selectTop15').then(res => {
+        if(res.code === '200') {
+          this.goodsData = res.data
+        } else {
+          this.$message.error(res.msg)
         }
       })
     },
