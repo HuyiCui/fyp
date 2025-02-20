@@ -58,8 +58,8 @@ public class GoodsController {
     /**
      * selectById
      */
-    @GetMapping("/selectById/{id}")
-    public Result selectById(@PathVariable Integer id) {
+    @GetMapping("/selectById")
+    public Result selectById(@RequestParam Integer id) {
         Goods goods = goodsService.selectById(id);
         return Result.success(goods);
     }
