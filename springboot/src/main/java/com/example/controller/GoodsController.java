@@ -79,6 +79,12 @@ public class GoodsController {
         return Result.success(list);
     }
 
+    @GetMapping("/selectByTypeId")
+    public Result selectByTypeId(@RequestParam Integer id) {
+        List<Goods> list = goodsService.selectByTypeId(id);
+        return Result.success(list);
+    }
+
     /**
      * selectPage
      */

@@ -9,7 +9,7 @@
           <div style="flex: 2; height: 800px">
             <div style="display: flex; color: rgb(102,102,102); margin: 14px 0" v-for="item in typeData">
               <img :src="item.img" alt="" style="height: 20px; width: 20px">
-              <div style="margin-left: 10px; font-size: 14px">{{ item.name }}</div>
+              <div style="margin-left: 10px; font-size: 14px"><a href="#" @click="navTo('/front/type?id=' + item.id)">{{ item.name }}</a></div>
             </div>
           </div>
           <div style="flex: 5; margin-top: 15px">

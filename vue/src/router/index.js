@@ -36,6 +36,7 @@ const routes = [
       { path: 'home', name: 'Home', meta: { name: 'System Home' }, component: () => import('../views/front/Home') },
       { path: 'person', name: 'Person', meta: { name: 'Personal information' }, component: () => import('../views/front/Person') },
       { path: 'detail', name: 'Detail', meta: { name: 'Product Details' }, component: () => import('../views/front/Detail') },
+      { path: 'type', name: 'Type ', meta: { name: 'Product Types' }, component: () => import('../views/front/Type') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: 'Log in' }, component: () => import('../views/Login.vue') },

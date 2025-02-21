@@ -86,4 +86,8 @@ public class GoodsService {
         return goodsMapper.selectTop15();
     }
 
+    public List<Goods> selectByTypeId(Integer id) {
+        return goodsMapper.selectByTypeId(id);
+    }
+
 }
