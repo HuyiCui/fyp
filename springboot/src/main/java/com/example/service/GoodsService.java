@@ -90,4 +90,7 @@ public class GoodsService {
         return goodsMapper.selectByTypeId(id);
     }
 
+    public List<Goods> selectByBusinessId(Integer id) {
+        return goodsMapper.selectByBusinessId(id);
+    }
 }

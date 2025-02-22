@@ -13,7 +13,7 @@
             <div style="margin-top: 20px">
               <img src="@/assets/imgs/right.png" alt="" style="width: 60%; height: 130px; border-radius: 15px">
             </div>
-              <div style="color: rgb(102, 102, 102); font-size: 14px; margin-top: 20px">Merchant: {{goodsData.businessName}}</div>
+              <div style="color: rgb(102, 102, 102); font-size: 14px; margin-top: 20px">Merchant: <a href="#" @click="navTo('/front/business?id=' + goodsData.businessId)">{{goodsData.businessName}}</a></div>
             <div style="color: rgb(102, 102, 102); font-size: 14px; margin-top: 20px">Type: <a href="#" @click="navTo('/front/type?id=' + goodsData.typeId)">{{goodsData.typeName}}</a></div>
             <div style="margin-top: 20px">
               <el-button type="warning">Add to Cart</el-button>

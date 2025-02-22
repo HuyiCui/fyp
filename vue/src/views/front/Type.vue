@@ -1,8 +1,8 @@
 <template>
   <div class="main-content">
-    <div style="height: 500px; display: flex; width: 70%; background-color: white; margin: 30px auto; border-radius: 5px">
+    <div style=" display: flex; width: 70%; background-color: white; margin: 30px auto; border-radius: 5px">
       <div style="flex: 1; padding: 0 20px">
-        <div style="font-size: 18px; color: #000000FF; line-height: 80px; border-bottom: #cccccc 1px solid">Types</div>
+        <div style="font-size: 18px; color: #000000FF; line-height: 80px; border-bottom: #cccccc 1px solid">{{ typeData.name }}</div>
         <div style="margin: 20px 0">
           <el-row :gutter="20">
             <el-col :span="6" style="margin-bottom: 20px" v-for="item in goodsData">
@@ -36,14 +36,25 @@ export default {
     return {
       user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
       typeId: typeId,
-      goodsData: []
+      goodsData: [],
+      typeData: [],
     }
   },
   mounted() {
     this.loadGoods()
+    this.loadType()
   },
   // methods: All click events or other function definition areas of this page
   methods: {
+    loadType(){
+      this.$request.get('/type/selectById/' + this.typeId).then(res => {
+        if (res.code === '200') {
+          this.typeData = res.data
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
     loadGoods(){
       this.$request.get('/goods/selectByTypeId?id=' + this.typeId).then(res => {
         if (res.code === '200') {
