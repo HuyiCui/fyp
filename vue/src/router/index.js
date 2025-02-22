@@ -40,6 +40,7 @@ const routes = [
       { path: 'business', name: 'Business', meta: { name: 'Merchant' }, component: () => import('../views/front/Business') },
       { path: 'collect', name: 'Collect', meta: { name: 'Favourite' }, component: () => import('../views/front/Collect') },
       { path: 'address', name: 'Address', meta: { name: 'My Address' }, component: () => import('../views/front/Address') },
+      { path: 'CART', name: 'cART', meta: { name: 'My cART' }, component: () => import('../views/front/Cart') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: 'Log in' }, component: () => import('../views/Login.vue') },

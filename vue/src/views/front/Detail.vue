@@ -16,7 +16,7 @@
               <div style="color: rgb(102, 102, 102); font-size: 14px; margin-top: 20px">Merchant: <a href="#" @click="navTo('/front/business?id=' + goodsData.businessId)">{{goodsData.businessName}}</a></div>
             <div style="color: rgb(102, 102, 102); font-size: 14px; margin-top: 20px">Type: <a href="#" @click="navTo('/front/type?id=' + goodsData.typeId)">{{goodsData.typeName}}</a></div>
             <div style="margin-top: 20px">
-              <el-button type="info">Add to Cart</el-button>
+              <el-button type="info" @click="addCart">Add to Cart</el-button>
               <el-button type="info" @click="collect">Add to Favourite</el-button>
             </div>
           </el-col>
@@ -71,6 +71,21 @@ export default {
         goodsId: this.goodsId,
       }
       this.$request.post('/collect/add', data).then(res => {
+        if(res.code === '200') {
+          this.$message.success('Successful')
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    addCart() {
+      let data = {
+        num: 1,
+        userId: this.user.id,
+        goodsId: this.goodsId,
+        businessId: this.goodsData.businessId,
+      }
+      this.$request.post('/cart/add', data).then(res => {
         if(res.code === '200') {
           this.$message.success('Successful')
         } else {

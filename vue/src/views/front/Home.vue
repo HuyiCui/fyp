@@ -64,8 +64,10 @@
                 </a>
               </div>
               <div style="flex: 1; text-align: center">
-                <img src="@/assets/imgs/cart.png" alt="" style="height: 25px; width: 25px">
-                <div>Cart</div>
+                <a href="#" @click="navTo('/front/cart')">
+                  <img src="@/assets/imgs/cart.png" alt="" style="height: 25px; width: 25px">
+                  <div>Cart</div>
+                </a>
               </div>
               <div style="flex: 1; text-align: center">
                 <img src="@/assets/imgs/order.png" alt="" style="height: 25px; width: 25px">
