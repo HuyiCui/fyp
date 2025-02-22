@@ -14,6 +14,7 @@ public enum ResultCodeEnum {
     USER_ACCOUNT_ERROR("5003", "Wrong account or password"),
     USER_NOT_EXIST_ERROR("5004", "User does not exist"),
     PARAM_PASSWORD_ERROR("5005", "The original password was entered incorrectly."),
+    COLLECT_ALREADY_ERROR("5006", "Already collected"),
     ;
 
     public String code;

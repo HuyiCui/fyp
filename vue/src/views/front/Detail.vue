@@ -17,7 +17,7 @@
             <div style="color: rgb(102, 102, 102); font-size: 14px; margin-top: 20px">Type: <a href="#" @click="navTo('/front/type?id=' + goodsData.typeId)">{{goodsData.typeName}}</a></div>
             <div style="margin-top: 20px">
               <el-button type="warning">Add to Cart</el-button>
-              <el-button type="warning">Add to Favourite</el-button>
+              <el-button type="warning" @click="collect">Add to Favourite</el-button>
             </div>
           </el-col>
         </el-row>
@@ -43,13 +43,14 @@ export default {
     return {
       user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
       goodsId: goodsId,
-      goodsData: {}
+      goodsData: [],
+      activeName: 'first'
     }
   },
   mounted() {
     this.loadGoods()
   },
-  // methods: All click events or other function definition areas of this page
+
   methods: {
     loadGoods() {
       this.$request.get('/goods/selectById?id=' + this.goodsId).then(res =>{
@@ -62,6 +63,20 @@ export default {
     },
     handleClick(tab, event) {
       this.activeName = tab.name
+    },
+    collect() {
+      let data = {
+        userId: this.user.id,
+        businessId: this.goodsData.businessId,
+        goodsId: this.goodsId,
+      }
+      this.$request.post('/collect/add', data).then(res => {
+        if(res.code === '200') {
+          this.$message.success('Successful')
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     },
     navTo(url){
       location.href = url
