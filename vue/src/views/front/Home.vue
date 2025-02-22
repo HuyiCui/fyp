@@ -52,8 +52,10 @@
             </div>
             <div style="display: flex; margin-top: 50px">
               <div style="flex: 1; text-align: center">
-                <img src="@/assets/imgs/favourite.png" alt="" style="height: 25px; width: 25px">
-                <div>Favourites</div>
+                <a href="#" @click="navTo('/front/collect')">
+                  <img src="@/assets/imgs/favourite.png" alt="" style="height: 25px; width: 25px">
+                  <div>Favourites</div>
+                </a>
               </div>
               <div style="flex: 1; text-align: center">
                 <img src="@/assets/imgs/address.png" alt="" style="height: 25px; width: 25px">

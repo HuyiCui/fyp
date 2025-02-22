@@ -4,7 +4,7 @@
     <div class="front-header">
       <div class="front-header-left">
         <img src="@/assets/imgs/logo.png" alt="" @click="navTo('/front/home')">
-        <div class="title">Second-hand trading website</div>
+        <div class="title" @click="navTo('/front/home')">Second-hand trading website</div>
       </div>
       <div class="front-header-center">
       </div>
@@ -22,6 +22,9 @@
               </div>
             </div>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>
+                <div style="text-decoration: none" @click="navTo('/front/collect')">Favourite</div>
+              </el-dropdown-item>
               <el-dropdown-item>
                 <div style="text-decoration: none" @click="logout">Logout</div>
               </el-dropdown-item>
@@ -74,7 +77,7 @@ export default {
     updateUser() {
       this.user = JSON.parse(localStorage.getItem('xm-user') || '{}')   // Re-obtain the latest information of the user
     },
-    navTo(){
+    navTo(url){
       location.href = url
     },
     // logout
