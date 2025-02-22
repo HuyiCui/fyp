@@ -2,9 +2,12 @@ package com.example.service;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.ResultCodeEnum;
+import com.example.common.enums.RoleEnum;
+import com.example.entity.Account;
 import com.example.entity.Collect;
 import com.example.exception.CustomException;
 import com.example.mapper.CollectMapper;
+import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -74,6 +77,10 @@ public class CollectService {
      * selectPage
      */
     public PageInfo<Collect> selectPage(Collect collect, Integer pageNum, Integer pageSize) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if (RoleEnum.USER.name().equals(currentUser.getRole())) {
+            collect.setUserId(currentUser.getId());
+        }
         PageHelper.startPage(pageNum, pageSize);
         List<Collect> list = collectMapper.selectAll(collect);
         return PageInfo.of(list);

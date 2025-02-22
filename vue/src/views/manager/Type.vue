@@ -47,7 +47,6 @@
       </div>
     </div>
 
-
     <el-dialog title="message" :visible.sync="fromVisible" width="40%" :close-on-click-modal="false" destroy-on-close>
       <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
         <el-form-item prop="name" label="name">

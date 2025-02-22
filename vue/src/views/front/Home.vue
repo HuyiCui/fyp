@@ -58,8 +58,10 @@
                 </a>
               </div>
               <div style="flex: 1; text-align: center">
-                <img src="@/assets/imgs/address.png" alt="" style="height: 25px; width: 25px">
-                <div>Address</div>
+                <a href="#" @click="navTo('/front/address')">
+                  <img src="@/assets/imgs/address.png" alt="" style="height: 25px; width: 25px">
+                  <div>Address</div>
+                </a>
               </div>
               <div style="flex: 1; text-align: center">
                 <img src="@/assets/imgs/cart.png" alt="" style="height: 25px; width: 25px">
