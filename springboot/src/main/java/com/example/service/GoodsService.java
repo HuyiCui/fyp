@@ -93,4 +93,8 @@ public class GoodsService {
     public List<Goods> selectByBusinessId(Integer id) {
         return goodsMapper.selectByBusinessId(id);
     }
+
+    public List<Goods> selectByName(String name) {
+        return goodsMapper.selectByName(name);
+    }
 }

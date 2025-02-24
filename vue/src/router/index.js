@@ -42,6 +42,7 @@ const routes = [
       { path: 'address', name: 'Address', meta: { name: 'My Address' }, component: () => import('../views/front/Address') },
       { path: 'cart', name: 'Cart', meta: { name: 'My Cart' }, component: () => import('../views/front/Cart') },
       { path: 'orders', name: 'Order', meta: { name: 'My Order' }, component: () => import('../views/front/Orders') },
+      { path: 'search', name: 'Search', meta: { name: 'Search' }, component: () => import('../views/front/Search') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: 'Log in' }, component: () => import('../views/Login.vue') },

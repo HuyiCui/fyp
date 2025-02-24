@@ -6,7 +6,9 @@
         <img src="@/assets/imgs/logo.png" alt="" @click="navTo('/front/home')">
         <div class="title" @click="navTo('/front/home')">Second-hand trading website</div>
       </div>
-      <div class="front-header-center">
+      <div class="front-header-center" style="text-align: right">
+        <el-input style="width: 200px" placeholder="Search the product name..." v-model="name"></el-input>
+        <el-button type="info" style="margin-left: 5px" @click="search">Search</el-button>
       </div>
       <div class="front-header-right">
         <div v-if="!user.username">
@@ -60,6 +62,7 @@ export default {
       top: '',
       notice: [],
       user: JSON.parse(localStorage.getItem("xm-user") || '{}'),
+      name: null
     }
   },
 
@@ -94,6 +97,10 @@ export default {
       localStorage.removeItem("xm-user");
       this.$router.push("/login");
     },
+    search(){
+      let name = this.name ? this.name : ''
+      location.href = '/front/search?name=' + name
+    }
   }
 
 }
