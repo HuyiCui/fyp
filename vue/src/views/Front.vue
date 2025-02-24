@@ -32,6 +32,9 @@
                 <div style="text-decoration: none" @click="navTo('/front/cart')">Cart</div>
               </el-dropdown-item>
               <el-dropdown-item>
+                <div style="text-decoration: none" @click="navTo('/front/orders')">Orders</div>
+              </el-dropdown-item>
+              <el-dropdown-item>
                 <div style="text-decoration: none" @click="logout">Logout</div>
               </el-dropdown-item>
             </el-dropdown-menu>

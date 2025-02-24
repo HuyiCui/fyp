@@ -63,6 +63,10 @@ public class AddressService {
      * selectAll
      */
     public List<Address> selectAll(Address address) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if (RoleEnum.USER.name().equals(currentUser.getRole())) {
+            address.setUserId(currentUser.getId());
+        }
         return addressMapper.selectAll(address);
     }
 

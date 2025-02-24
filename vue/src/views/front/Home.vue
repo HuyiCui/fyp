@@ -70,8 +70,10 @@
                 </a>
               </div>
               <div style="flex: 1; text-align: center">
-                <img src="@/assets/imgs/order.png" alt="" style="height: 25px; width: 25px">
-                <div>Order</div>
+                <a href="#" @click="navTo('/front/orders')">
+                  <img src="@/assets/imgs/order.png" alt="" style="height: 25px; width: 25px">
+                  <div>Order</div>
+                </a>
               </div>
             </div>
           </div>
