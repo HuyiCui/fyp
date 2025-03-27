@@ -35,4 +35,7 @@ public interface OrdersMapper {
      * selectAll
      */
     List<Orders> selectAll(Orders orders);
+
+    @Select("select * from orders where status = 'Finished' or status = 'Rated'")
+    List<Orders> selectAllOKOrders();
 }

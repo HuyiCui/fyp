@@ -112,6 +112,7 @@ export default {
       top: null,
       notice: [],
       goodsData: [],
+      recommendData: [],
       carousel_top: [
           require('@/assets/imgs/carousel-1.png'),
           require('@/assets/imgs/carousel-2.png'),
@@ -133,9 +134,19 @@ export default {
     this.loadType()
     this.loadNotice()
     this.loadGoods()
+    this.loadRecommend()
   },
   // methods: All click events or other function definition areas of this page
   methods: {
+    loadRecommend() {
+      this.$request.get('/goods/recommend').then(res => {
+        if(res.code === '200') {
+          this.recommendData = res.data
+        }else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
     loadType() {
       this.$request.get('/type/selectAll').then(res => {
         if(res.code == '200') {

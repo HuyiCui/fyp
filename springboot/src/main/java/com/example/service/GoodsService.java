@@ -1,16 +1,22 @@
 package com.example.service;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.RoleEnum;
-import com.example.entity.Account;
-import com.example.entity.Goods;
-import com.example.mapper.GoodsMapper;
+import com.example.entity.*;
+import com.example.mapper.*;
 import com.example.utils.TokenUtils;
+import com.example.utils.UserCF;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Classification information table business processing
@@ -20,7 +26,16 @@ public class GoodsService {
 
     @Resource
     private GoodsMapper goodsMapper;
-
+    @Resource
+    private UserMapper userMapper;
+    @Resource
+    private CollectMapper collectMapper;
+    @Resource
+    private CommentMapper commentMapper;
+    @Resource
+    private CartMapper cartMapper;
+    @Resource
+    private OrdersMapper ordersMapper;
     /**
      * add
      */
@@ -96,5 +111,75 @@ public class GoodsService {
 
     public List<Goods> selectByName(String name) {
         return goodsMapper.selectByName(name);
+    }
+
+    public List<Goods> recommend() {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if (ObjectUtil.isEmpty(currentUser)) {
+            return new ArrayList<>();
+        }
+        List<Collect> allCollects = collectMapper.selectAll(null);
+        List<Cart> allCarts = cartMapper.selectAll(null);
+        List<Orders> allOrders = ordersMapper.selectAllOKOrders();
+        List<Comment> allComments = commentMapper.selectAll(null);
+        List<User> allUsers = userMapper.selectAll(null);
+        List<Goods> allGoods = goodsMapper.selectAll(null);
+
+        List<RelateDTO> data = new ArrayList<>();
+        List<Goods> result = new ArrayList<>();
+
+        for (Goods goods : allGoods) {
+            Integer goodsId = goods.getId();
+            for (User user : allUsers) {
+                Integer userId = user.getId();
+                int index = 1;
+                Optional<Collect> collectOptional = allCollects.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
+                if (collectOptional.isPresent()) {
+                    index += 1;
+                }
+                Optional<Cart> cartOptional = allCarts.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
+                if (cartOptional.isPresent()) {
+                    index += 2;
+                }
+                Optional<Orders> ordersOptional = allOrders.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
+                if (ordersOptional.isPresent()) {
+                    index += 3;
+                }
+                Optional<Comment> commentOptional = allComments.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
+                if (commentOptional.isPresent()) {
+                    index += 2;
+                }
+                if (index > 1) {
+                    RelateDTO relateDTO = new RelateDTO(userId, goodsId, index);
+                    data.add(relateDTO);
+                }
+            }
+        }
+
+        List<Integer> goodsIds = UserCF.recommend(currentUser.getId(), data);
+
+        List<Goods> recommendResult = goodsIds.stream().map(goodsId -> allGoods.stream()
+                        .filter(x -> x.getId().equals(goodsId)).findFirst().orElse(null))
+                .limit(10).collect(Collectors.toList());
+
+        if (CollectionUtil.isEmpty(recommendResult)) {
+            return getRandomGoods(10);
+        }
+        if (recommendResult.size() < 10) {
+            int num = 10 - recommendResult.size();
+            List<Goods> list = getRandomGoods(num);
+            result.addAll(list);
+        }
+        return result;
+    }
+
+    private List<Goods> getRandomGoods(int num) {
+        List<Goods> list = new ArrayList<>(num);
+        List<Goods> goods = goodsMapper.selectAll(null);
+        for (int i = 0; i < num; i++) {
+            int index = new Random().nextInt(goods.size());
+            list.add(goods.get(index));
+        }
+        return list;
     }
 }

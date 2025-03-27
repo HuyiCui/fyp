@@ -45,6 +45,8 @@
             <el-menu-item v-if="user.role === 'ADMIN'" index="/notice">Announcement</el-menu-item>
               <el-menu-item v-if="user.role === 'ADMIN'" index="/type">Types</el-menu-item>
               <el-menu-item  index="/goods">Products</el-menu-item>
+              <el-menu-item  index="/orders">Orders</el-menu-item>
+              <el-menu-item  index="/comment">Comments</el-menu-item>
           </el-submenu>
 
           <el-submenu index="user" v-if="user.role === 'ADMIN'">

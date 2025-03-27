@@ -26,6 +26,8 @@ const routes = [
       { path: 'notice', name: 'Notice', meta: { name: 'Announcement Information' }, component: () => import('../views/manager/Notice') },
       { path: 'type', name: 'Type', meta: { name: 'Classified Information' }, component: () => import('../views/manager/Type') },
       { path: 'goods', name: 'Goods', meta: { name: 'Products Information' }, component: () => import('../views/manager/Goods') },
+      { path: 'orders', name: 'Orders', meta: { name: 'Orderss Information' }, component: () => import('../views/manager/Orders') },
+      { path: 'comment', name: 'Comment', meta: { name: 'Comment Information' }, component: () => import('../views/manager/Comment') },
     ]
   },
   {
