@@ -88,6 +88,16 @@
             </el-col>
           </el-row>
         </div>
+        <div style="margin: 40px 0 0 15px; height: 40px; background-color: lightskyblue; font-size: 20px; color: white; width: 130px; font-weight: bold; height: 40px; line-height: 40px; text-align: center; border-radius: 10px">Recommendation</div>
+        <div style="margin: 10px 5px 0 5px">
+          <el-row>
+            <el-col :span="5" v-for="item in recommendData">
+              <img @click="navTo('/front/detail?id=' + item.id)" :src="item.img" alt="" style="width: 100%; height: 175px; border-radius: 10px; border: #cccccc 1px solid; ">
+              <div style="margin-top: 10px; font-weight: 500; font-size: 16px; width: 180px; color: black; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">{{item.name}}</div>
+              <div style="margin-top: 5px; font-size: 20px; color: darkblue">${{item.price}}</div>
+            </el-col>
+          </el-row>
+        </div>
       </div>
       <div class="right"></div>
     </div>
