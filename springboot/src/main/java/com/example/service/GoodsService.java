@@ -1,6 +1,5 @@
 package com.example.service;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.*;
@@ -16,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -126,51 +128,58 @@ public class GoodsService {
         List<Goods> allGoods = goodsMapper.selectAll(null);
 
         List<RelateDTO> data = new ArrayList<>();
-        List<Goods> result = new ArrayList<>();
+        List<Goods> recommendResult;
+
+        //Creating a Barrier, wait for all asynchronous processing to complete before moving on
+        CountDownLatch countDownLatch = new CountDownLatch(allGoods.size() * allUsers.size());
+        //Creating a thread pool
+        ExecutorService threadPool = Executors.newCachedThreadPool();
 
         for (Goods goods : allGoods) {
             Integer goodsId = goods.getId();
             for (User user : allUsers) {
-                Integer userId = user.getId();
-                int index = 1;
-                Optional<Collect> collectOptional = allCollects.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
-                if (collectOptional.isPresent()) {
-                    index += 1;
-                }
-                Optional<Cart> cartOptional = allCarts.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
-                if (cartOptional.isPresent()) {
-                    index += 2;
-                }
-                Optional<Orders> ordersOptional = allOrders.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
-                if (ordersOptional.isPresent()) {
-                    index += 3;
-                }
-                Optional<Comment> commentOptional = allComments.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
-                if (commentOptional.isPresent()) {
-                    index += 2;
-                }
-                if (index > 1) {
-                    RelateDTO relateDTO = new RelateDTO(userId, goodsId, index);
-                    data.add(relateDTO);
-                }
+                threadPool.execute(() -> {
+                    Integer userId = user.getId();
+                    int index = 1;
+                    Optional<Collect> collectOptional = allCollects.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
+                    if (collectOptional.isPresent()) {
+                        index += 1;
+                    }
+                    Optional<Cart> cartOptional = allCarts.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
+                    if (cartOptional.isPresent()) {
+                        index += 2;
+                    }
+                    Optional<Orders> ordersOptional = allOrders.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
+                    if (ordersOptional.isPresent()) {
+                        index += 3;
+                    }
+                    Optional<Comment> commentOptional = allComments.stream().filter(x -> x.getGoodsId().equals(goodsId) && x.getUserId().equals(userId)).findFirst();
+                    if (commentOptional.isPresent()) {
+                        index += 2;
+                    }
+                    if (index > 1) {
+                        RelateDTO relateDTO = new RelateDTO(userId, goodsId, index);
+                        data.add(relateDTO);
+                    }
+                    countDownLatch.countDown();
+                });
             }
         }
 
-        List<Integer> goodsIds = UserCF.recommend(currentUser.getId(), data);
+        try{
+            countDownLatch.await();
+            threadPool.shutdown();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            List<Integer> goodsIds = UserCF.recommend(currentUser.getId(), data);
 
-        List<Goods> recommendResult = goodsIds.stream().map(goodsId -> allGoods.stream()
-                        .filter(x -> x.getId().equals(goodsId)).findFirst().orElse(null))
-                .limit(10).collect(Collectors.toList());
+            recommendResult = goodsIds.stream().map(goodsId -> allGoods.stream()
+                            .filter(x -> x.getId().equals(goodsId)).findFirst().orElse(null))
+                    .limit(10).collect(Collectors.toList());
+        }
 
-        if (CollectionUtil.isEmpty(recommendResult)) {
-            return getRandomGoods(10);
-        }
-        if (recommendResult.size() < 10) {
-            int num = 10 - recommendResult.size();
-            List<Goods> list = getRandomGoods(num);
-            result.addAll(list);
-        }
-        return result;
+        return recommendResult;
     }
 
     private List<Goods> getRandomGoods(int num) {
