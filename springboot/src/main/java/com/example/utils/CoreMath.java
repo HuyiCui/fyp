@@ -3,63 +3,82 @@ package com.example.utils;
 import cn.hutool.core.collection.CollectionUtil;
 import com.example.entity.RelateDTO;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.IntStream;
+import java.util.*;
 
 public class CoreMath {
-    public static Map<Integer, Double> computeNeighbor(Integer key, Map<Integer, List<RelateDTO>> map, int type) {
-        Map<Integer, Double> distMap = new TreeMap<>();
-        List<RelateDTO> userItems = map.get(key);
-        if (CollectionUtil.isNotEmpty(userItems)) {
-            map.forEach((k, v) -> {
-                if (!k.equals(key)) {
-                    double coefficient = relateDist(v, userItems, type);
-                    double distance = Math.abs(coefficient);
-                    distMap.put(k, distance);
-                }
-            });
+    public static Map<Integer, Double> computeNeighbor(Integer anchorId,
+                                                       Map<Integer, List<RelateDTO>> grouped,
+                                                       int mode) {
+
+        if (anchorId == null || CollectionUtil.isEmpty(grouped)) {
+            return Collections.emptyMap();
         }
-        return distMap;
+        List<RelateDTO> anchorList = grouped.get(anchorId);
+        if (CollectionUtil.isEmpty(anchorList)) {
+            return Collections.emptyMap();
+        }
+
+        Map<Integer, Double> similarity = new TreeMap<>();
+
+        for (Map.Entry<Integer, List<RelateDTO>> entry : grouped.entrySet()) {
+            Integer otherId = entry.getKey();
+            if (otherId.equals(anchorId)) {
+                continue;
+            }
+            double coef = correlation(entry.getValue(), anchorList, mode);
+            similarity.put(otherId, Math.abs(coef));
+        }
+        return similarity;
     }
 
-    private static double relateDist(List<RelateDTO> xList, List<RelateDTO> yList, int type) {
+    /** Calculate the Pearson correlation coefficient between two sets of interaction records */
+    private static double correlation(List<RelateDTO> lhs,
+                                      List<RelateDTO> rhs,
+                                      int mode) {
+
         List<Integer> xs = new ArrayList<>();
         List<Integer> ys = new ArrayList<>();
-        xList.forEach(x -> yList.forEach(y -> {
-            if (type == 0) {
-                if (x.getGoodsId().equals(y.getGoodsId())) {
-                    xs.add(x.getIndex());
-                    ys.add(y.getIndex());
-                }
-            } else {
-                if (x.getUseId().equals(y.getUseId())) {
-                    xs.add(x.getIndex());
-                    ys.add(y.getIndex());
+
+        for (RelateDTO a : lhs) {
+            for (RelateDTO b : rhs) {
+                boolean matched = (mode == 0)
+                        ? a.getGoodsId().equals(b.getGoodsId())
+                        : a.getUseId().equals(b.getUseId());
+
+                if (matched) {
+                    xs.add(a.getIndex());
+                    ys.add(b.getIndex());
                 }
             }
-        }));
-        return getRelate(xs, ys);
+        }
+        return pearson(xs, ys);
     }
 
-    public static double getRelate(List<Integer> xs, List<Integer> ys) {
+    /** Pearson formula implementation (returns 0 when n < 2) */
+    public static double pearson(List<Integer> xs, List<Integer> ys) {
         int n = xs.size();
         if (n < 2) {
-            return 0D;
+            return 0D;          // There are too few samples, so the correlation is considered 0
         }
-        double Ex = xs.stream().mapToDouble(x -> x).sum();
-        double Ey = ys.stream().mapToDouble(y -> y).sum();
-        double Ex2 = xs.stream().mapToDouble(x -> Math.pow(x, 2)).sum();
-        double Ey2 = ys.stream().mapToDouble(y -> Math.pow(y, 2)).sum();
-        double Exy = IntStream.range(0, n).mapToDouble(i -> xs.get(i) * ys.get(i)).sum();
-        double numerator = Exy - Ex * Ey / n;
-        double denominator = Math.sqrt((Ex2 - Math.pow(Ex, 2) / n) * (Ey2 - Math.pow(Ey, 2) / n));
-        if (denominator == 0) {
-            return 0D;
+
+        double sumX = 0, sumY = 0, sumX2 = 0, sumY2 = 0, sumXY = 0;
+
+        for (int i = 0; i < n; i++) {
+            double x = xs.get(i);
+            double y = ys.get(i);
+
+            sumX  += x;
+            sumY  += y;
+            sumX2 += x * x;     // x²
+            sumY2 += y * y;     // y²
+            sumXY += x * y;     // x·y
         }
-        return numerator / denominator;
+
+        double numerator   = sumXY - (sumX * sumY) / n;
+        double denominator = Math.sqrt((sumX2 - (sumX * sumX) / n) *
+                (sumY2 - (sumY * sumY) / n));
+
+        return denominator == 0 ? 0D : numerator / denominator;
     }
 
 }
