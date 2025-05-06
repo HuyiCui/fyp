@@ -4,8 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.*;
 import com.example.mapper.*;
+import com.example.utils.CFAlgo;
 import com.example.utils.TokenUtils;
-import com.example.utils.UserCF;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -172,7 +172,7 @@ public class GoodsService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            List<Integer> goodsIds = UserCF.recommend(currentUser.getId(), data);
+            List<Integer> goodsIds = CFAlgo.recommend(currentUser.getId(), data);
 
             recommendResult = goodsIds.stream().map(goodsId -> allGoods.stream()
                             .filter(x -> x.getId().equals(goodsId)).findFirst().orElse(null))
